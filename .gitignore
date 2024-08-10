@@ -1,5 +1,5 @@
 **/venv
 **/checkpoints
-**/datasets
+datasets
 **/logs/*
 **/__pycache__/*
