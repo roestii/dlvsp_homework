@@ -13,6 +13,7 @@ def main(args):
     image_folder = args["image_folder"]
     checkpoint_path = args["checkpoint_path"]
     out_folder = args["out_folder"]
+    batch_size = args["batch_size"]
 
     encoder = vision_transformer.__dict__[model_name](
         img_size=[crop_size],
@@ -24,7 +25,7 @@ def main(args):
         os.mkdir(os.path.join(out_folder, mode))
         dataset, dataloader = make_food101(
             transforms, 
-            1, 
+            batch_size, 
             mode="val/",
             root_path="",
             image_folder=image_folder
@@ -35,10 +36,12 @@ def main(args):
             os.mkdir(path)
 
         it = iter(dataloader)
-        for i, (x, y) in enumerate(it):
-            embedding = encoder(x)
-            cl = dataset.classes[y[0]]
-            path = os.path.join(out_folder, mode, cl, f"{i}.npy")
-            with open(path, "wb") as file:
-                embedding = embedding.detach().numpy()
-                np.save(file, embedding)
+        for i, (xs, ys) in enumerate(it):
+            print(f"iteration {i}")
+            embeddings = encoder(xs)
+            for k in range(len(embeddings)):
+                cl = dataset.classes[ys[k]]
+                path = os.path.join(out_folder, mode, cl, f"{i}_{k}.npy")
+                with open(path, "wb") as file:
+                    embedding = embeddings[i].detach().numpy()
+                    np.save(file, embedding)
