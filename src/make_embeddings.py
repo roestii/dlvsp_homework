@@ -36,8 +36,9 @@ def main(args):
 
         it = iter(dataloader)
         for i, (x, y) in enumerate(it):
-            embedding = np.array(encoder(x))
+            embedding = encoder(x)
             cl = dataset.classes[y[0]]
             path = os.path.join(out_folder, mode, cl, f"{i}.npy")
             with open(path, "wb") as file:
+                embedding = embedding.detach().numpy()
                 np.save(file, embedding)
