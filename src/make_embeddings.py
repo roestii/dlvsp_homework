@@ -21,6 +21,7 @@ def main(args):
     transforms = make_transforms(crop_size=crop_size)
 
     for mode in ["val/", "test/"]:
+        os.mkdir(os.path.join(out_folder, mode))
         dataset, dataloader = make_food101(
             transforms, 
             1, 
