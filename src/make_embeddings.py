@@ -19,22 +19,24 @@ def main(args):
         patch_size=patch_size)
     encoder = load_encoder(encoder, checkpoint_path)
     transforms = make_transforms(crop_size=crop_size)
-    dataset, dataloader = make_food101(
-        transforms, 
-        1, 
-        mode="val/",
-        root_path="",
-        image_folder=image_folder
-    )
 
-    for cl in dataset.classes:
-        path = os.path.join(out_folder, cl)
-        os.mkdir(path)
+    for mode in ["val/", "test/"]:
+        dataset, dataloader = make_food101(
+            transforms, 
+            1, 
+            mode="val/",
+            root_path="",
+            image_folder=image_folder
+        )
 
-    it = iter(dataloader)
-    for i, (x, y) in enumerate(it):
-        embedding = np.array(encoder(x))
-        cl = dataset.classes[y[0]]
-        path = os.path.join(out_folder, cl, f"{i}.npy")
-        with open(path, "wb") as file:
-            np.save(file, embedding)
+        for cl in dataset.classes:
+            path = os.path.join(out_folder, mode, cl)
+            os.mkdir(path)
+
+        it = iter(dataloader)
+        for i, (x, y) in enumerate(it):
+            embedding = np.array(encoder(x))
+            cl = dataset.classes[y[0]]
+            path = os.path.join(out_folder, mode, cl, f"{i}.npy")
+            with open(path, "wb") as file:
+                np.save(file, embedding)
