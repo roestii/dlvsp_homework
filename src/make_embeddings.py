@@ -22,7 +22,7 @@ def main(args):
     dataset, dataloader = make_food101(
         transforms, 
         1, 
-        training=False,
+        mode="val/",
         root_path="",
         image_folder=image_folder
     )

@@ -20,16 +20,16 @@ def make_food101(
     num_workers=8,
     root_path=None,
     image_folder=None,
-    training=True,
+    mode="train/",
     copy_data=False,
     drop_last=True,
-    subset_file=None
+    subset_file=None,
 ):
     dataset = Food101(
         root=root_path,
         image_folder=image_folder,
         transform=transform,
-        train=training,
+        mode=mode,
         copy_data=copy_data,
         index_targets=False)
     # if subset_file is not None:
@@ -56,11 +56,11 @@ class Food101(torchvision.datasets.ImageFolder):
         image_folder='food101',
         tar_file='food101.tar.gz',
         transform=None,
-        train=True,
+        mode="train/",
         job_id=None,
         local_rank=None,
         copy_data=True,
-        index_targets=False
+        index_targets=False,
     ):
         """
         ImageNet
@@ -76,8 +76,7 @@ class Food101(torchvision.datasets.ImageFolder):
         :param index_targets: whether to index the id of each labeled image
         """
 
-        suffix = 'train/' if train else 'val/'
-        data_path = os.path.join(root, image_folder, suffix)
+        data_path = os.path.join(root, image_folder, mode)
         logger.info(f'data-path {data_path}')
 
         super(Food101, self).__init__(root=data_path, transform=transform)
