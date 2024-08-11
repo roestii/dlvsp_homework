@@ -19,6 +19,15 @@ from src.utils.tensors import trunc_normal_
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
 
+def load_encoder(
+    encoder,
+    c_path
+):
+    checkpoint = torch.load(c_path, map_location=torch.device('cpu'), weights_only=True)
+    encoder.load_state_dict(checkpoint["encoder"])
+
+    del checkpoint
+    return encoder
 
 def load_checkpoint(
     device,

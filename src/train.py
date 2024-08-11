@@ -136,7 +136,7 @@ def main(args, resume_preempt=False):
     # -- log/checkpointing paths
     log_file = os.path.join(folder, f'{tag}.csv')
     save_path = os.path.join(checkpoint_folder, f'{tag}' + '-ep{epoch}.pth.tar')
-    latest_path = os.path.join(folder, f'{tag}-latest.pth.tar')
+    latest_path = os.path.join(checkpoint_folder, f'{tag}-latest.pth.tar')
     load_path = None
     if load_model:
         load_path = os.path.join(checkpoint_folder, r_file) if r_file is not None else latest_path
@@ -159,6 +159,8 @@ def main(args, resume_preempt=False):
         pred_emb_dim=pred_emb_dim,
         model_name=model_name)
     target_encoder = copy.deepcopy(encoder)
+    print(encoder.parameters())
+    print(predictor.parameters())
 
     # -- make data transforms
     mask_collator = MBMaskCollator(

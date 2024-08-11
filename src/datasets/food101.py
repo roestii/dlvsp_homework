@@ -45,7 +45,7 @@ def make_food101(
         pin_memory=pin_mem,
         num_workers=num_workers,
         persistent_workers=False)
-    logger.info('food101 unsupervised data loader created')
+    logger.info('food101 data loader created')
 
     return dataset, data_loader
 
@@ -77,18 +77,7 @@ class Food101(torchvision.datasets.ImageFolder):
         """
 
         suffix = 'train/' if train else 'val/'
-        data_path = None
-        if copy_data:
-            logger.info('copying data locally')
-            data_path = copy_food101_locally(
-                root=root,
-                suffix=suffix,
-                image_folder=image_folder,
-                tar_file=tar_file,
-                job_id=job_id,
-                local_rank=local_rank)
-        if (not copy_data) or (data_path is None):
-            data_path = os.path.join(root, image_folder, suffix)
+        data_path = os.path.join(root, image_folder, suffix)
         logger.info(f'data-path {data_path}')
 
         super(Food101, self).__init__(root=data_path, transform=transform)

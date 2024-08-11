@@ -1,0 +1,6 @@
+epochs: 15
+pretrained: DEFAULT
+batch_size: 64
+root_path: datasets/
+image_folder: food-101/
+checkpoint_folder: checkpoints/
