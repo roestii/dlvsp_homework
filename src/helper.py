@@ -23,7 +23,8 @@ def load_encoder(
     encoder,
     c_path
 ):
-    checkpoint = torch.load(c_path, map_location=torch.device('cpu'), weights_only=True)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    checkpoint = torch.load(c_path, map_location=torch.device(device), weights_only=True)
     encoder.load_state_dict(checkpoint["encoder"])
 
     del checkpoint

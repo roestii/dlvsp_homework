@@ -27,15 +27,14 @@ def main(args):
         image_folder=image_folder
     )
 
-    embeddings = {cl: [] for cl in dataset.classes}
+    for cl in dataset.classes:
+        path = os.path.join(out_folder, cl)
+        os.mkdir(path)
+
     it = iter(dataloader)
-
-    for x, y in it:
-        embedding = encoder(x)
-        embeddings[y].append(embedding)
-
-    for k, v in embeddings.items():
-        fpath = os.path.join(out_folder, f"{k}.npy")
-        with open(fpath, "wb") as file:
-            v = np.array(v)
-            np.save(file, v)
+    for i, (x, y) in enumerate(it):
+        embedding = np.array(encoder(x))
+        cl = dataset.classes[y[0]]
+        path = os.path.join(out_folder, cl, f"{i}.npy")
+        with open(path, "wb") as file:
+            np.save(file, embedding)
