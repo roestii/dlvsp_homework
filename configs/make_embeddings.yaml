@@ -1,0 +1,6 @@
+model_name: vit_huge
+crop_size: 224
+patch_size: 14
+image_folder: datasets/food-101
+checkpoint_path: checkpoints/f101_finutuned_ijepa_ep310.pth.tar
+out_folder: embeddings/
