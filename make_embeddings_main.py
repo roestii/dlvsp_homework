@@ -1,18 +1,18 @@
 import sys
 import os
 import yaml
+import argparse
 
 from src import make_embeddings 
 
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] != "--config":
-        sys.exit("Please pass in a config.")
-
-    config_path = sys.argv[2] 
-    if not os.path.exists(config_path):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", required=True)
+    args = parser.parse_args()
+    if not os.path.exists(args.config):
         sys.exit("The provided config file does not exist.")
 
-    with open(config_path, "r") as y_file:
+    with open(args.config, "r") as y_file:
         args = yaml.load(y_file, Loader=yaml.FullLoader)
         make_embeddings.main(args)
 

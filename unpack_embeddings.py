@@ -44,3 +44,6 @@ def main():
 
             p = os.path.join(args.output, str(c), f"{i}_{k}.npy")
             np.save(p, e.numpy())
+
+if __name__ == "__main__":
+    main()
