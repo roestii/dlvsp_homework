@@ -20,11 +20,12 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
 
 def load_encoder(
+    device,
     encoder,
     c_path
 ):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    checkpoint = torch.load(c_path, map_location=torch.device(device), weights_only=True)
+    encoder = encoder.to(device)
+    checkpoint = torch.load(c_path, map_location=torch.device(device))
     encoder.load_state_dict(checkpoint["encoder"])
 
     del checkpoint

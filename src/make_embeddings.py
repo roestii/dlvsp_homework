@@ -16,11 +16,12 @@ def main(args):
     out_folder = args["out_folder"]
     batch_size = args["batch_size"]
 
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     with torch.no_grad():
         encoder = vision_transformer.__dict__[model_name](
             img_size=[crop_size],
             patch_size=patch_size)
-        encoder = load_encoder(encoder, checkpoint_path)
+        encoder = load_encoder(device, encoder, checkpoint_path)
         transforms = make_transforms(crop_size=crop_size)
 
         for mode in ["val/", "test/"]:
@@ -31,16 +32,16 @@ def main(args):
             dataset, dataloader = make_food101(
                 transforms, 
                 batch_size, 
-                mode="val/",
+                mode=mode,
                 root_path="",
                 image_folder=image_folder
             )
 
             it = iter(dataloader)
             for i, (x, y) in enumerate(it):
-                print(i)
+                print(f"Iteration: {i}")
+                x = x.to(device)
                 embedding = encoder(x)
-                print("encoded")
                 emb_path = os.path.join(data_path, f"embedding_{i}.pth")
                 y_path = os.path.join(data_path, f"class_{i}.pth")
                 torch.save(embedding, emb_path)
