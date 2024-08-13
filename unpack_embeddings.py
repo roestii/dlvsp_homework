@@ -22,7 +22,7 @@ def main():
     for _, _, files in os.walk(args.input):
         for file in files:
             i = file.find("_")
-            num = int(file[i + 1:])
+            num = int(file[i + 1:-4])
             if num > max:
                 max = num
 
@@ -32,18 +32,21 @@ def main():
             os.mkdir(p)
 
     for i in range(0, max + 1):
-        emb_path = f"embedding_{i}.pth"
-        cl_path = f"class_{i}.pth"
-        embs = torch.load(emb_path)
-        cl = torch.load(cl_path)
+        emb_path = os.path.join(args.input, f"embedding_{i}.pth")
+        cl_path = os.path.join(args.input, f"class_{i}.pth")
+        embs = torch.load(emb_path, map_location=torch.device("cpu"))
+        cl = torch.load(cl_path, map_location=torch.device("cpu"))
 
         assert(len(embs) == len(cl))
         for k in range(len(cl)):
-            c = cl[k]
+            c = cl[k].item()
             e = embs[k]
 
             p = os.path.join(args.output, str(c), f"{i}_{k}.npy")
             np.save(p, e.numpy())
+
+        del embs
+        del cl
 
 if __name__ == "__main__":
     main()

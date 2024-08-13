@@ -2,5 +2,6 @@
 **/checkpoints
 /datasets/
 /embeddings/*
+/embeddings_unpacked/*
 **/logs/*
 **/__pycache__/*
