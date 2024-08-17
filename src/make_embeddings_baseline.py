@@ -1,4 +1,5 @@
 import os
+import numpy as np 
 import torch
 
 from src.datasets.food101 import make_food101
@@ -15,19 +16,8 @@ def main(args):
     out_folder = args["out_folder"]
     batch_size = args["batch_size"]
 
-
     device = "cuda" if torch.cuda.is_available() else "cpu"
     with torch.no_grad():
-        if model_name != "base_learner":
-            encoder = vision_transformer.__dict__[model_name](
-                img_size=[crop_size],
-                patch_size=patch_size)
-            encoder = load_encoder(device, encoder, checkpoint_path)
-        else: 
-            encoder = torch.load(checkpoint_path, map_location=torch.device(device))
-            encoder = torch.nn.Sequential(encoder.backbone, encoder.flatten)
-        
-        encoder = encoder.to(device)
         transforms = make_transforms(crop_size=crop_size)
 
         for mode in ["val/", "test/"]:

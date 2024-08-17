@@ -17,7 +17,6 @@ def main():
     if not os.path.isdir(args.output):
         sys.exit(f"{args.output} not found.")
 
-
     max = 0
     for _, _, files in os.walk(args.input):
         for file in files:
@@ -36,6 +35,8 @@ def main():
         cl_path = os.path.join(args.input, f"class_{i}.pth")
         embs = torch.load(emb_path, map_location=torch.device("cpu"))
         cl = torch.load(cl_path, map_location=torch.device("cpu"))
+        print(cl.shape)
+        print(embs.shape)
 
         assert(len(embs) == len(cl))
         for k in range(len(cl)):

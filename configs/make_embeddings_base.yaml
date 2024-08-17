@@ -1,0 +1,7 @@
+model_name: base_learner
+crop_size: 224
+patch_size: 14
+batch_size: 128
+image_folder: datasets/food-101
+checkpoint_path: checkpoints/base_learner_final.pth.tar
+out_folder: embeddings_base/

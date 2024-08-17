@@ -1,28 +1,11 @@
 import torch
 from torch import nn
-from torch.utils.data import Dataset, DataLoader
 from torchvision.models import resnet18
 
 from src.datasets.food101 import make_food101
 from src.transforms import make_transforms
 from src.utils.logging import AverageMeter
-
-class Food101(Dataset):
-    def __init__(self):
-        pass
-
-class BaseLearner(nn.Module):
-    def __init__(self, backbone, n_classes):
-        super(BaseLearner, self).__init__()
-        self.backbone = backbone
-        self.flatten = nn.Flatten()
-        self.fc = nn.Linear(512, n_classes)
-
-    def forward(self, x):
-        x = self.backbone(x)
-        x = self.flatten(x)
-        x = self.fc(x)
-        return x
+from src.models.baseline import BaselineModel
 
 def main(args):
     batch_size = args["batch_size"]
@@ -30,6 +13,8 @@ def main(args):
     image_folder = args["image_folder"]
     pretrained = args["pretrained"]
     epochs = args["epochs"]
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
     transforms = make_transforms()
     dataset, data_loader = make_food101(
@@ -43,7 +28,9 @@ def main(args):
     # remove imagenet classification head
     backbone = nn.Sequential(*(list(backbone.children())[:-1]))
 
-    base_learner = BaseLearner(backbone, len(dataset.classes))
+    base_learner = BaselineModel(backbone, len(dataset.classes))
+    base_learner = base_learner.to(device)
+
     optimizer = torch.optim.Adam(base_learner.parameters())
     criterion = torch.nn.CrossEntropyLoss()
 
@@ -53,14 +40,16 @@ def main(args):
         it = iter(data_loader)
 
         for x, y in it:
+            x = x.to(device)
+            y = y.to(device)
             optimizer.zero_grad()
             output = base_learner(x)
             loss = criterion(output, y)
             loss.backward()
             avg_loss.update(loss)
 
-        print(f"Average loss: {avg_loss}")
+        print(f"Average loss: {avg_loss.avg}")
         avg_loss.reset()
+        torch.save(base_learner, f"checkpoints/base_learner_ep{epoch}.pth.tar")
 
-    torch.save(base_learner, f"checkpoints/base_learner.pth.tar")
-
+    torch.save(base_learner, f"checkpoints/base_learner_final.pth.tar")
