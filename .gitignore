@@ -1,7 +1,7 @@
 **/venv
 **/checkpoints
 /datasets/
-/embeddings*/*
+**/embeddings*/*
 **/logs/*
 **/__pycache__/*
 **/plots

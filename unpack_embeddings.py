@@ -26,25 +26,22 @@ def main():
                 max = num
 
     for i in range(0, max + 1):
-        p = os.path.join(args.output, str(i))
-        if not os.path.exists(p):
-            os.mkdir(p)
-
-    for i in range(0, max + 1):
         emb_path = os.path.join(args.input, f"embedding_{i}.pth")
         cl_path = os.path.join(args.input, f"class_{i}.pth")
         embs = torch.load(emb_path, map_location=torch.device("cpu"))
         cl = torch.load(cl_path, map_location=torch.device("cpu"))
-        print(cl.shape)
-        print(embs.shape)
 
         assert(len(embs) == len(cl))
         for k in range(len(cl)):
             c = cl[k].item()
             e = embs[k]
 
-            p = os.path.join(args.output, str(c), f"{i}_{k}.npy")
-            np.save(p, e.numpy())
+            p = os.path.join(args.output, str(c))
+            if not os.path.exists(p):
+                os.mkdir(p)
+
+            fpath = os.path.join(p, f"{i}_{k}.npy")
+            np.save(fpath, e.numpy())
 
         del embs
         del cl
