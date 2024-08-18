@@ -20,10 +20,10 @@ python3 unpack_embeddings.py --input embeddings/val --output embeddings_unpacked
 
 ### Visualize embeddings
 ```
-python3 visualize_embeddings.py --emb-path datasets/embeddings_unpacked/val --include-n 200 --plot-path plots/plot.png
+python3 visualize_embeddings.py --emb-path embeddings_unpacked/val --include-n 200 --plot-path plots/plot.png
 ```
 
 ### Train and evaluate the base learner
 ```
-python3 baselearner_main.py --emb-path datasets/embeddings_unpacked/val --include-n 5 --k 10 --test-size 100 --base-learner logistic_regression --output test_results
+python3 baselearner_main.py --emb-path embeddings_unpacked/val --include-n 5 --k 10 --test-size 100 --base-learner logistic_regression --output test_results
 ```
