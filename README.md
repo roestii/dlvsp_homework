@@ -1,5 +1,9 @@
 # Steps to reproduce
-**NOTE**: Some directories have to be created prior to executing the commands. Otherwise, errors might be thrown.
+**NOTE**:   Some directories have to be created prior to executing the commands. Otherwise, errors might be thrown.
+            The fine-tuning of the I-JEPA was performed on a google colab instance with an A100 40GB GPU. Running 
+            the fine-tuning or inference locally may not be suitable. The google colab notebooks can be found 
+            in the `colab_notebooks` folder. Please contact me if you are interested in the fine-tuned weights or 
+            the precomputed embeddings from both the I-JEPA and baseline model.
 
 ### Fine-tuning the I-JEPA model
 ```
