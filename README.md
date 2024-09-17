@@ -12,9 +12,10 @@ python3 fine_tune.py --config configs/f101_vith14_ep300.yaml
 ```
 Save the latest model under `checkpoints/f101_finetuned_ijepa_ep310.pth.tar`.
 
-### Precompute embeddings using the fine-tuned I-JEPA
+### Precompute embeddings using both the fine-tuned I-JEPA and the baseline model
 ```
 python3 make_embeddings_main.py --config configs/f101_finetuned_ep310.yaml
+python3 make_embeddings_main.py --config configs/make_embeddings_base.yaml
 ```
  
 ### Unpack embedding files
